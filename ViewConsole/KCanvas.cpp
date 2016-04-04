@@ -1,4 +1,8 @@
 #include "KCanvas.h"
+#define _USE_MATH_DEFINES
+#include <math.h>
+
+
 
 
 //void KObject::Drow() {
@@ -41,11 +45,21 @@ void KCanvas::KReleaseGraphics()
 
 void KCanvas::KCheckScale(Point p)
 {
-	if ( (p.X*ScaleFactorX) > (winRect.right * 0.8) )
-		ScaleFactorX *= 0.7;
+	if ((double)(p.X*ScaleFactorX) > (winRect.right * .9f)) {
+		ScaleFactorX *= 0.5f; ScaleFactorY *= 0.5f;
+
+
+	}
+		
+	    // ScaleFactorY -= 0.30f;
 	   // ScaleFactorY *= 0.15;
-	if ( (p.Y*ScaleFactorY) > (winRect.bottom * 0.8) )
-		ScaleFactorY *= 0.7;
+	if ((double)(p.Y*ScaleFactorY) > (winRect.bottom * .9f)) {
+		ScaleFactorY *= 0.5f; ScaleFactorX *= 0.5f;
+
+
+	}
+		
+	   // ScaleFactorX -= 0.30f;
 	  //  ScaleFactorX *= 0.15;
 
 }
@@ -76,11 +90,13 @@ RESULT KCanvas::KFlush()
 	
 	for (int i = 0; i < objects_list.size(); i++) {
 		cur = objects_list[i]->GetPosition();
-		g->FillRectangle(backGraund, (int)((startLeft + cur.X)*ScaleFactorX), (int)((startBottom - cur.Y)*ScaleFactorY), 5, 5); //startLeft + cur.X, startBottom - cur.Y
+		//g->FillRectangle(backGraund, (int)(startLeft + cur.X*ScaleFactorX), (int)(startBottom - cur.Y*ScaleFactorY), 5, 5); //startLeft + cur.X, startBottom - cur.Y
 		
 		cur = objects_list[i]->GetNextPosition();
-		KCheckScale(cur);
-		g->FillRectangle(objBrush, (int)((startLeft + cur.X)*ScaleFactorX), (int)((startBottom - cur.Y)*ScaleFactorY), 5, 5); //(int)((startBottom + cur.X)*ScaleFactorX), (int)((startLeft - cur.Y)*ScaleFactorY)
+		//KCheckScale(cur);
+		g->FillRectangle(objBrush, (int)(startLeft + cur.X*ScaleFactorX), (int)(startBottom - cur.Y*ScaleFactorY), 5, 5); //(int)((startBottom + cur.X)*ScaleFactorX), (int)((startLeft - cur.Y)*ScaleFactorY)
+		//g->DrawRectangle(penAxis, (int)(startLeft + cur.X*ScaleFactorX), (int)(startBottom - cur.Y*ScaleFactorY), 5, 5);
+
 	}
 
 	//g->DrawLine(objBrush, 0, 0, winRect.right - i / 5, winRect.bottom);//  work, but is in the primary screen
@@ -97,15 +113,19 @@ RESULT KCanvas::StartSemulation()
 
 Point KRectangle::GetNextPosition() 
 {
-	pos.X++;
-	pos.Y++;
+	//pos.Y++;
+	pos.X += 5; 
+	//M_PI_2*
+	pos.Y = 40*sin((M_PI/180)*((pos.X)%(int)(360.0/2.0))*2.0  ) + 100;
 	return pos;
 }
 
 
 Point KCircle::GetNextPosition() 
 {
-	pos.X++;
-	pos.Y++;
+	//pos.X++;
+	//pos.Y++;
+
+	pos.Y = objLib->getMPosition(pos.X++);
 	return pos;
 }

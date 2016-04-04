@@ -6,6 +6,12 @@
 #include <GdiPlusTypes.h>
 #pragma comment (lib,"Gdiplus.lib")
 
+
+#include "MovementLib.h"
+
+#pragma comment(lib, "MovementLib.lib")
+
+
 #pragma once
 
 //#define 
@@ -54,9 +60,12 @@ class KCircle : public KObject
 {
 private:
 	Point pos;
+	IMovement *objLib;
 public:
-	KCircle() :pos(0, 0) { this->eShape = KObject::CIRCLE; };
-	~KCircle() {};
+	KCircle() :pos(0, 0) {
+		this->eShape = KObject::CIRCLE; objLib = GetMovmentLib();
+	};
+	~KCircle() { objLib->Release(); };
 	Point GetPosition() { return pos; };
 	Point GetNextPosition();
 };

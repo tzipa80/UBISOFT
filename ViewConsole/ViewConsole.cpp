@@ -51,12 +51,14 @@ int main(int argc, char **argv)
 
 	KCanvas first;
 	KRectangle rect;
+	KCircle cir;
 	first.KAddObject(&rect);
+	first.KAddObject(&cir);
 	while (true)
 	{
 		first.KFlush();
 
-		Sleep(10);
+		Sleep(20);
 	}
 
 
